@@ -6,7 +6,7 @@ services:
     volumes:
       - ./inventory-service:/var/www/html
     ports:
-      - "9001:9000"
+      - "9003:9000"
     networks:
       - ecommerce-network
     depends_on:
@@ -16,7 +16,7 @@ services:
   inventory-nginx:
     image: nginx:latest
     ports:
-      - "8001:80"
+      - "8005:80"
     volumes:
       - ./inventory-service/public:/var/www/html
       - ./inventory-service/docker/nginx/default.conf:/etc/nginx/nginx.conf
@@ -34,7 +34,7 @@ services:
       MYSQL_USER: inventory_user
       MYSQL_PASSWORD: inventory_password
     ports:
-      - "3309:3306"
+      - "3310:3306"
     volumes:
       - ./inventory-service/docker/db-data:/var/lib/mysql
     networks:
