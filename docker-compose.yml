@@ -1,0 +1,48 @@
+services:
+  inventory-service:
+    build:
+      context: ./inventory-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./inventory-service:/var/www/html
+    ports:
+      - "9001:9000"
+    networks:
+      - ecommerce-network
+    depends_on:
+      - inventory-db
+    command: ["php-fpm"]
+
+  inventory-nginx:
+    image: nginx:latest
+    ports:
+      - "8001:80"
+    volumes:
+      - ./inventory-service/public:/var/www/html
+      - ./inventory-service/docker/nginx/default.conf:/etc/nginx/nginx.conf
+    networks:
+      - ecommerce-network
+    depends_on:
+      - inventory-service
+
+  inventory-db:
+    image: mysql:8.0
+    container_name: inventory-service-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventory
+      MYSQL_USER: inventory_user
+      MYSQL_PASSWORD: inventory_password
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./inventory-service/docker/db-data:/var/lib/mysql
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    external: true
+
+volumes:
+  db-data:
