@@ -11,6 +11,8 @@ services:
       - ecommerce-network
     depends_on:
       - inventory-db
+    env_file:
+      - ./inventory-service/.env
     command: ["php-fpm"]
 
   inventory-nginx:
