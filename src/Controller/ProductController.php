@@ -60,7 +60,6 @@ class ProductController extends AbstractController
                 ],
             ]);
         } catch (\Throwable $e) {
-            dd($e->getMessage());
             $this->entityManager->rollback();
 
             return $this->json(['error' => 'An error occurred while updating the product status'], Response::HTTP_INTERNAL_SERVER_ERROR);

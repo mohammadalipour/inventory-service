@@ -13,7 +13,8 @@ services:
       - inventory-db
     env_file:
       - ./inventory-service/.env
-    command: ["php-fpm"]
+    entrypoint: [ "/bin/bash", "docker/start.sh" ]
+    command: [ "php-fpm" ]
 
   inventory-nginx:
     image: nginx:latest
