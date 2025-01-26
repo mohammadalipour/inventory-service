@@ -23,14 +23,17 @@ class Product
     private int $reservedQuantity = 0;
 
     #[ORM\ManyToOne(targetEntity: Warehouse::class)]
-    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     private Warehouse $warehouseId;
 
-    #[ORM\Column(type: 'string', enumType: ProductStatus::class, columnDefinition: 'ENUM("in_stock", "out_of_stock", "backordered")')]
+    #[ORM\Column(type: 'string', enumType: ProductStatus::class, columnDefinition: 'ENUM("in_stock", "out_of_stock")')]
     private ProductStatus $status;
 
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $enabled = true;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isDeleted = false;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
@@ -71,17 +74,6 @@ class Product
     public function setQuantityInStock(int $quantityInStock): self
     {
         $this->quantityInStock = $quantityInStock;
-        return $this;
-    }
-
-    public function getReorderLevel(): int
-    {
-        return $this->reorderLevel;
-    }
-
-    public function setReorderLevel(int $reorderLevel): self
-    {
-        $this->reorderLevel = $reorderLevel;
         return $this;
     }
 
@@ -126,6 +118,17 @@ class Product
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setSoftDelete(bool $deleted): self
+    {
+        $this->isDeleted = $deleted;
         return $this;
     }
 
