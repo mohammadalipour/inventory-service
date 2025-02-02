@@ -1,5 +1,0 @@
-lexik_jwt_authentication:
-    secret_key: '%env(JWT_SECRET_KEY)%'  # Path to your secret key
-    public_key: '%env(JWT_PUBLIC_KEY)%'  # Path to your public key
-    pass_phrase: '%env(JWT_PASSPHRASE)%'  # Your passphrase if needed
-    token_ttl: 3600  # Token TTL in seconds (1 hour in this example)

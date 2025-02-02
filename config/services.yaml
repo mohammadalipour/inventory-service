@@ -1,20 +1,23 @@
-parameters:
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Message\Event\Product\ProductCreatedEvent:
-        tags:
-            - { name: 'enqueue.processor', topic: 'inventory-service.product_created' }
-    App\Message\Event\Product\ProductUpdatedEvent:
-        tags:
-            - { name: 'enqueue.processor', topic: 'inventory-service.product_updated' }
-    App\Message\Event\Product\ProductRemovedEvent:
-        tags:
-            - { name: 'enqueue.processor', topic: 'inventory-service.product_removed' }
+
+    messenger.transport.json_serializer:
+        class: Symfony\Component\Messenger\Transport\Serialization\Serializer
+        arguments:
+            - '@serializer'
+            - 'json'
+
+    Symfony\Component\Messenger\Transport\Serialization\Normalizer\EnvelopeNormalizer: ~
+    Symfony\Component\Messenger\Transport\Serialization\Normalizer\BusNameStampNormalizer: ~
+    Symfony\Component\Messenger\Transport\Serialization\Normalizer\StampInterfaceNormalizer: ~
+    Symfony\Component\Messenger\Transport\Serialization\Normalizer\TransportMessageNormalizer: ~
+    Symfony\Component\Messenger\Transport\Serialization\Normalizer\StampNormalizer: ~

@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
-use Enqueue\Client\Message;
-use Enqueue\Client\ProducerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly ProducerInterface $producer)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -46,8 +44,8 @@ class ProductController extends AbstractController
             $this->entityManager->flush();
 
             $messageBody = json_encode(['data'=>['product_id' => $product->getId(), 'enabled' => $product->isEnabled()]]);
-            $message = new Message($messageBody, ['Content-Type' => 'application/json']);
-            $this->producer->sendEvent('service_shopping_queue', $message);
+//            $message = new Message($messageBody, ['Content-Type' => 'application/json']);
+//            $this->producer->sendEvent('service_shopping_queue', $message);
 
             // Commit transaction
             $this->entityManager->commit();

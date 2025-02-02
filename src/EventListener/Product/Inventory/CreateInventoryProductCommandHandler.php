@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Message\Event\Product;
+namespace App\EventListener\Product\Inventory;
 
 use App\Entity\Product;
 use App\Entity\ProductStatus;
 use Doctrine\ORM\EntityManagerInterface;
-use Interop\Queue\Context;
-use Interop\Queue\Message;
 use Interop\Queue\Processor;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ProductCreatedEvent implements Processor
+#[AsMessageHandler]
+class CreateInventoryProductCommandHandler
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
-    public function process(Message $message, Context $context): string
+    public function __invoke(CreateInventoryProductCommand $command)
     {
         try {
-            $payload = json_decode($message->getBody(), true);
+            $payload = json_decode($command->content(), true);
 
             dump($payload);
             $data = $payload['data'] ?? null;
@@ -44,4 +44,3 @@ class ProductCreatedEvent implements Processor
         }
     }
 }
-
